@@ -7,6 +7,32 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Inertia\Inertia;
 
+if (config('app.debug')) {
+    Route::get('/debug-db', function () {
+        try {
+            $version = DB::selectOne('select version() as version');
+
+            return response()->json([
+                'ok' => true,
+                'database' => config('database.connections.mysql.database'),
+                'host' => config('database.connections.mysql.host'),
+                'port' => config('database.connections.mysql.port'),
+                'version' => $version?->version,
+                'tables' => [
+                    'users' => Schema::hasTable('users'),
+                    'documents' => Schema::hasTable('documents'),
+                    'site_settings' => Schema::hasTable('site_settings'),
+                ],
+            ]);
+        } catch (Throwable $exception) {
+            return response()->json([
+                'ok' => false,
+                'error' => $exception->getMessage(),
+            ], 500);
+        }
+    });
+}
+
 $siteSettings = fn (): array => DB::table('site_settings')
     ->when(Schema::hasTable('site_settings'), fn ($query) => $query->orderBy('key'))
     ->when(! Schema::hasTable('site_settings'), fn () => collect())

@@ -5,6 +5,38 @@ use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
+if (getenv('VERCEL')) {
+    $tmpPath = sys_get_temp_dir().'/laravel';
+
+    foreach ([
+        $tmpPath,
+        $tmpPath.'/cache',
+        $tmpPath.'/sessions',
+        $tmpPath.'/views',
+        $tmpPath.'/logs',
+    ] as $path) {
+        if (! is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
+    }
+
+    $serverlessEnv = [
+        'APP_CONFIG_CACHE' => $tmpPath.'/cache/config.php',
+        'APP_EVENTS_CACHE' => $tmpPath.'/cache/events.php',
+        'APP_PACKAGES_CACHE' => $tmpPath.'/cache/packages.php',
+        'APP_ROUTES_CACHE' => $tmpPath.'/cache/routes.php',
+        'APP_SERVICES_CACHE' => $tmpPath.'/cache/services.php',
+        'VIEW_COMPILED_PATH' => $tmpPath.'/views',
+        'LOG_CHANNEL' => getenv('LOG_CHANNEL') ?: 'stderr',
+    ];
+
+    foreach ($serverlessEnv as $key => $value) {
+        putenv($key.'='.$value);
+        $_ENV[$key] = $value;
+        $_SERVER[$key] = $value;
+    }
+}
+
 // Determine if the application is in maintenance mode...
 if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
     require $maintenance;
