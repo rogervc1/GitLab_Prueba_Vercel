@@ -1,0 +1,19 @@
+@import './PortalUniversitario.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    @apply bg-graphite-50 text-graphite-900 antialiased;
+}
+
+button,
+a,
+input {
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-institutional-500 focus-visible:ring-offset-2;
+}
