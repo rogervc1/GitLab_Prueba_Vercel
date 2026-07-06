@@ -34,17 +34,13 @@ export default function EventCard({ event }) {
                 <p className="portal-unap__news-description mt-3 line-clamp-3 text-sm leading-relaxed text-graphite-600">
                     {event.description}
                 </p>
-                {event.url && (
-                    <a
-                        href={event.url}
-                        className="portal-unap__news-link mt-auto inline-flex items-center gap-2 text-sm font-bold text-white transition-transform hover:translate-x-1"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        Leer mas
-                        <Icon name="chevronRight" className="h-4 w-4" />
-                    </a>
-                )}
+                <a
+                    href="#"
+                    className="portal-unap__news-link mt-auto inline-flex items-center gap-2 text-sm font-bold text-white transition-transform hover:translate-x-1"
+                >
+                    Leer más
+                    <Icon name="chevronRight" className="h-4 w-4" />
+                </a>
             </div>
         </article>
     );

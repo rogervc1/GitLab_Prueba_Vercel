@@ -13,7 +13,7 @@ const asArray = (value) => {
 };
 
 export default function Documents({
-    settings = {},
+    settings,
     documents = { items: [], total: 0, page: 1, total_pages: 1 },
     categories = [],
     filters = { search: '', category: [] },
@@ -46,13 +46,16 @@ export default function Documents({
 
     return (
         <Layout settings={settings}>
-            <Head title={settings.documents_title || 'Documentos'} />
+            <Head title="Documentos de Gestion" />
             <div className="portal-page">
                 <section className="portal-hero portal-hero--compact">
                     <div className="portal-unap__container">
-                        <p className="portal-hero__badge">{settings.documents_badge}</p>
-                        <h1 className="portal-hero__title">{settings.documents_title}</h1>
-                        <p className="portal-hero__text">{settings.documents_description}</p>
+                        <p className="portal-hero__badge">Transparencia y gestión</p>
+                        <h1 className="portal-hero__title">Documentos de Gestión</h1>
+                        <p className="portal-hero__text">
+                            Consulta planes, reglamentos, informes, directivas y formatos
+                            oficiales.
+                        </p>
                     </div>
                 </section>
 

@@ -153,131 +153,24 @@ class ContentSeeder extends Seeder
             ]);
         }
 
-        $featuredVideos = [
-            [
-                'Impacto de los proyectos sociales universitarios',
-                'Resumen audiovisual de acciones desarrolladas con comunidades aliadas.',
-                '#',
-                'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1200&q=80',
-                '03:42',
-            ],
-            [
-                'Voluntariado y compromiso estudiantil',
-                'Testimonios de estudiantes que participan en iniciativas de servicio.',
-                '#',
-                'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1200&q=80',
-                '04:18',
-            ],
-            [
-                'Gestion ambiental en accion',
-                'Buenas practicas para promover una cultura sostenible en el campus.',
-                '#',
-                'https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&w=1200&q=80',
-                '02:55',
-            ],
-        ];
-
-        foreach ($featuredVideos as $index => [$title, $description, $videoUrl, $imageUrl, $duration]) {
-            $this->insertIfMissing('featured_videos', 'title', $title, [
-                'title' => $title,
-                'description' => $description,
-                'video_url' => $videoUrl,
-                'image_url' => $imageUrl,
-                'duration' => $duration,
-                'sort_order' => $index,
-                'is_active' => true,
-                'created_at' => $now,
-                'updated_at' => $now,
-            ]);
-        }
-
-        $suggestedLinks = [
-            ['Convocatorias abiertas', 'Revisa oportunidades activas para proyectos, voluntariado y aliados.', 'users', '#'],
-            ['Convenios comunitarios', 'Conoce las lineas de colaboracion disponibles para instituciones externas.', 'handshake', '#'],
-            ['Reportes de impacto', 'Consulta avances, indicadores y resultados de intervenciones sociales.', 'building', '#'],
-        ];
-
-        foreach ($suggestedLinks as $index => [$title, $description, $iconKey, $url]) {
-            $this->insertIfMissing('suggested_links', 'title', $title, [
-                'title' => $title,
-                'description' => $description,
-                'icon_key' => $iconKey,
-                'url' => $url,
-                'sort_order' => $index,
-                'is_active' => true,
-                'created_at' => $now,
-                'updated_at' => $now,
-            ]);
-        }
-
-        $metrics = [
-            ['Proyectos activos', 12, null],
-            ['Convenios activos', 13, null],
-            ['Voluntariado activo', 14, null],
-        ];
-
-        foreach ($metrics as $index => [$label, $value, $suffix]) {
-            $this->insertIfMissing('institutional_metrics', 'label', $label, [
-                'label' => $label,
-                'value' => $value,
-                'suffix' => $suffix,
-                'sort_order' => $index,
-                'is_active' => true,
-                'created_at' => $now,
-                'updated_at' => $now,
-            ]);
-        }
-
         $settings = [
             'site_name' => 'Direccion de Proyeccion Social y Extension Cultural',
-            'header_title_line_1' => 'Direccion de Proyeccion Social',
-            'header_title_line_2' => 'y Extension Cultural',
-            'home_events_kicker' => 'Agenda institucional',
-            'home_events_title' => 'Eventos recientes',
-            'home_events_link_label' => 'Ver todos los eventos',
-            'home_videos_kicker' => 'Material audiovisual',
-            'home_videos_title' => 'Videos destacados',
-            'home_suggested_kicker' => 'Tambien puede interesarte',
-            'home_suggested_title' => 'Accesos sugeridos',
-            'home_facebook_kicker' => 'Actualidad institucional',
-            'home_facebook_title' => 'Noticias desde Facebook',
-            'about_badge' => 'Identidad institucional',
-            'about_title' => 'Nosotros',
-            'about_description' => 'Trabajamos para que el conocimiento universitario dialogue con las necesidades reales de la sociedad.',
-            'documents_badge' => 'Transparencia y gestion',
-            'documents_title' => 'Documentos de Gestion',
-            'documents_description' => 'Consulta planes, reglamentos, informes, directivas y formatos oficiales.',
-            'events_badge' => 'Agenda',
-            'events_title' => 'Eventos',
-            'events_description' => 'Actividades institucionales, jornadas comunitarias y espacios de colaboracion.',
             'footer_title' => 'Oficina de Proyeccion Social',
             'footer_subtitle' => 'Vinculacion, impacto y desarrollo',
             'footer_description' => 'Articulamos programas, proyectos y actividades que conectan la vida universitaria con las necesidades de la comunidad.',
-            'footer_copyright' => '(c) 2026 Oficina de Proyeccion Social. Todos los derechos reservados.',
             'address' => 'Av. Universitaria 123, Lima, Peru',
             'phone' => '(01) 555-0198',
             'email' => 'proyeccion.social@universidad.edu.pe',
-            'facebook_url' => 'https://www.facebook.com/people/Direcci%C3%B3n-de-Proyecci%C3%B3n-Social-y-Extensi%C3%B3n-Cultural-UNA-Puno/100071137256988/',
+            'facebook_url' => '#',
             'instagram_url' => '#',
             'linkedin_url' => '#',
         ];
 
         foreach ($settings as $key => $value) {
-            $existingValue = DB::table('site_settings')->where('key', $key)->value('value');
-
-            if ($existingValue === null) {
-                DB::table('site_settings')->insert([
-                    'key' => $key,
-                    'value' => $value,
-                ]);
-            } elseif (
-                ($existingValue === '#' && $value !== '#')
-                || ($key === 'facebook_url' && str_contains($existingValue, 'profile.php?id=100071137256988'))
-            ) {
-                DB::table('site_settings')->where('key', $key)->update([
-                    'value' => $value,
-                ]);
-            }
+            $this->insertIfMissing('site_settings', 'key', $key, [
+                'key' => $key,
+                'value' => $value,
+            ]);
         }
     }
 

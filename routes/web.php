@@ -40,9 +40,6 @@ if (config('app.debug')) {
                     'users' => $tableExists('users'),
                     'documents' => $tableExists('documents'),
                     'site_settings' => $tableExists('site_settings'),
-                    'featured_videos' => $tableExists('featured_videos'),
-                    'suggested_links' => $tableExists('suggested_links'),
-                    'institutional_metrics' => $tableExists('institutional_metrics'),
                 ],
             ]);
         } catch (Throwable $exception) {
@@ -61,7 +58,6 @@ $eventResource = fn (object $item): array => [
     'date' => $item->event_date,
     'location' => $item->location,
     'image' => $item->image_url,
-    'url' => $item->url ?? null,
 ];
 
 Route::get('/', function () use ($siteSettings, $eventResource, $tableExists) {
@@ -99,35 +95,6 @@ Route::get('/', function () use ($siteSettings, $eventResource, $tableExists) {
                 ->orderBy('id')
                 ->get()
             : collect(),
-        'featuredVideos' => $tableExists('featured_videos')
-            ? DB::table('featured_videos')
-                ->where('is_active', true)
-                ->orderBy('sort_order')
-                ->orderBy('id')
-                ->get()
-                ->map(fn ($item) => [
-                    'id' => $item->id,
-                    'title' => $item->title,
-                    'description' => $item->description,
-                    'url' => $item->video_url,
-                    'image' => $item->image_url,
-                    'duration' => $item->duration,
-                ])
-            : collect(),
-        'suggestedLinks' => $tableExists('suggested_links')
-            ? DB::table('suggested_links')
-                ->where('is_active', true)
-                ->orderBy('sort_order')
-                ->orderBy('id')
-                ->get()
-                ->map(fn ($item) => [
-                    'id' => $item->id,
-                    'title' => $item->title,
-                    'description' => $item->description,
-                    'icon' => $item->icon_key,
-                    'url' => $item->url,
-                ])
-            : collect(),
     ]);
 })->name('home');
 
@@ -136,13 +103,6 @@ Route::get('/nosotros', function () use ($siteSettings, $tableExists) {
         'settings' => $siteSettings(),
         'sections' => $tableExists('institutional_sections')
             ? DB::table('institutional_sections')
-                ->where('is_active', true)
-                ->orderBy('sort_order')
-                ->orderBy('id')
-                ->get()
-            : collect(),
-        'metrics' => $tableExists('institutional_metrics')
-            ? DB::table('institutional_metrics')
                 ->where('is_active', true)
                 ->orderBy('sort_order')
                 ->orderBy('id')
