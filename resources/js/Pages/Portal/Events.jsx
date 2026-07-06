@@ -11,21 +11,18 @@ const asArray = (value) => {
     return value && typeof value === 'object' ? Object.values(value) : [];
 };
 
-export default function Events({ settings, events = { items: [], page: 1, total_pages: 1 } }) {
+export default function Events({ settings = {}, events = { items: [], page: 1, total_pages: 1 } }) {
     const eventItems = asArray(events.items);
 
     return (
         <Layout settings={settings}>
-            <Head title="Eventos" />
+            <Head title={settings.events_title || 'Eventos'} />
             <div className="portal-page">
                 <section className="portal-hero portal-hero--compact">
                     <div className="portal-unap__container">
-                        <p className="portal-hero__badge">Agenda</p>
-                        <h1 className="portal-hero__title">Eventos</h1>
-                        <p className="portal-hero__text">
-                            Actividades institucionales, jornadas comunitarias y espacios de
-                            colaboracion.
-                        </p>
+                        <p className="portal-hero__badge">{settings.events_badge}</p>
+                        <h1 className="portal-hero__title">{settings.events_title}</h1>
+                        <p className="portal-hero__text">{settings.events_description}</p>
                     </div>
                 </section>
 

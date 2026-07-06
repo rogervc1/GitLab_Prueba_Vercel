@@ -9,29 +9,15 @@ const navItems = [
     { label: 'Eventos', href: '/eventos', route: 'events' },
 ];
 
-const defaultSettings = {
-    footer_title: 'Oficina de Proyeccion Social',
-    footer_subtitle: 'Vinculacion, impacto y desarrollo',
-    footer_description:
-        'Articulamos programas, proyectos y actividades que conectan la vida universitaria con las necesidades de la comunidad.',
-    address: 'Av. Universitaria 123, Lima, Peru',
-    phone: '(01) 555-0198',
-    email: 'proyeccion.social@universidad.edu.pe',
-    facebook_url: '#',
-    instagram_url: '#',
-    linkedin_url: '#',
-};
-
 export default function Layout({ children, settings = {} }) {
     const [isOpen, setIsOpen] = useState(false);
     const { url } = usePage();
-    const mergedSettings = { ...defaultSettings, ...settings };
 
     const socialLinks = [
-        { icon: 'facebook', url: mergedSettings.facebook_url, label: 'Facebook' },
-        { icon: 'instagram', url: mergedSettings.instagram_url, label: 'Instagram' },
-        { icon: 'linkedin', url: mergedSettings.linkedin_url, label: 'LinkedIn' },
-    ];
+        { icon: 'facebook', url: settings.facebook_url, label: 'Facebook' },
+        { icon: 'instagram', url: settings.instagram_url, label: 'Instagram' },
+        { icon: 'linkedin', url: settings.linkedin_url, label: 'LinkedIn' },
+    ].filter((item) => item.url && item.url !== '#');
 
     const navClass = (href) => {
         const active = href === '/' ? url === '/' : url.startsWith(href);
@@ -59,10 +45,10 @@ export default function Layout({ children, settings = {} }) {
                         />
                         <span className="min-w-0 text-center leading-tight">
                             <span className="block text-[11px] font-black uppercase text-graphite-950 sm:text-sm lg:text-base">
-                                Dirección de Proyección Social
+                                {settings.header_title_line_1}
                             </span>
                             <span className="block text-[11px] font-black uppercase text-graphite-950 sm:text-sm lg:text-base">
-                                y Extensión Cultural
+                                {settings.header_title_line_2}
                             </span>
                         </span>
                         <img
@@ -118,51 +104,61 @@ export default function Layout({ children, settings = {} }) {
                                 PS
                             </span>
                             <div>
-                                <p className="font-black">{mergedSettings.footer_title}</p>
+                                <p className="font-black">{settings.footer_title}</p>
                                 <p className="text-sm text-institutional-100">
-                                    {mergedSettings.footer_subtitle}
+                                    {settings.footer_subtitle}
                                 </p>
                             </div>
                         </div>
                         <p className="mt-5 max-w-md text-sm leading-6 text-institutional-100">
-                            {mergedSettings.footer_description}
+                            {settings.footer_description}
                         </p>
                     </div>
 
                     <div className="space-y-4 text-sm text-institutional-100">
                         <h2 className="text-base font-bold text-white">Contacto</h2>
-                        <p className="flex items-start gap-3">
-                            <Icon name="mapPin" className="mt-0.5 h-4 w-4 shrink-0" />
-                            {mergedSettings.address}
-                        </p>
-                        <p className="flex items-center gap-3">
-                            <Icon name="phone" className="h-4 w-4" />
-                            {mergedSettings.phone}
-                        </p>
-                        <p className="flex items-center gap-3">
-                            <Icon name="mail" className="h-4 w-4" />
-                            {mergedSettings.email}
-                        </p>
+                        {settings.address && (
+                            <p className="flex items-start gap-3">
+                                <Icon name="mapPin" className="mt-0.5 h-4 w-4 shrink-0" />
+                                {settings.address}
+                            </p>
+                        )}
+                        {settings.phone && (
+                            <p className="flex items-center gap-3">
+                                <Icon name="phone" className="h-4 w-4" />
+                                {settings.phone}
+                            </p>
+                        )}
+                        {settings.email && (
+                            <p className="flex items-center gap-3">
+                                <Icon name="mail" className="h-4 w-4" />
+                                {settings.email}
+                            </p>
+                        )}
                     </div>
 
-                    <div>
-                        <h2 className="text-base font-bold text-white">Redes sociales</h2>
-                        <div className="mt-4 flex gap-3">
-                            {socialLinks.map(({ icon, url: socialUrl, label }) => (
-                                <a
-                                    key={label}
-                                    href={socialUrl}
-                                    className="grid h-10 w-10 place-items-center rounded-md bg-white/10 text-white transition hover:bg-white hover:text-institutional-900"
-                                    aria-label={label}
-                                >
-                                    <Icon name={icon} />
-                                </a>
-                            ))}
+                    {socialLinks.length > 0 && (
+                        <div>
+                            <h2 className="text-base font-bold text-white">Redes sociales</h2>
+                            <div className="mt-4 flex gap-3">
+                                {socialLinks.map(({ icon, url: socialUrl, label }) => (
+                                    <a
+                                        key={label}
+                                        href={socialUrl}
+                                        className="grid h-10 w-10 place-items-center rounded-md bg-white/10 text-white transition hover:bg-white hover:text-institutional-900"
+                                        aria-label={label}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <Icon name={icon} />
+                                    </a>
+                                ))}
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
                 <div className="border-t border-white/10 px-4 py-4 text-center text-xs text-institutional-100">
-                    (c) 2026 Oficina de Proyeccion Social. Todos los derechos reservados.
+                    {settings.footer_copyright}
                 </div>
             </footer>
         </div>
